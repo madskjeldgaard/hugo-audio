@@ -20,6 +20,8 @@ Note: It has to be the last component, after your main theme.
 theme  = [ "exformal-hugo-theme", "hugo-audio"]
 ```  
 
+The theme component **expects you to have jquery installed**.
+
 ## Configuration
 
 ## Usage
