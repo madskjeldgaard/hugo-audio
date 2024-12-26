@@ -6,7 +6,13 @@ You can see it in action on [madskjeldgaard.dk](https://madskjeldgaard.dk) and [
 
 ## Installation
 
-Put this in your themes folder in your hugo website, then add it your list of themes:
+Put this folder in your themes folder in your hugo website. You can use git submodules to do this:
+
+```bash
+git submodule add git@github.com:madskjeldgaard/hugo-audio.git themes/hugo-audio
+```
+
+Then add it your list of themes:
 
 Note: It has to be the last component, after your main theme.
 
