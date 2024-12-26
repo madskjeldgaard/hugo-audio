@@ -1,0 +1,128 @@
+{{ $title := .title | default "" }}
+{{ $mp3 := .mp3 }}
+{{ $id := .id | default (now.UnixNano) }}
+
+{{ $css_id := printf "jquery_jplayer_%d" $id }}
+{{ $container_id := printf "jp_container_%d" $id }}
+
+
+{{/* default css */}}
+<style>
+.jp-play {
+  /* border-radius: 0 0 5px; */
+  background-color: white;
+  color: black;
+  padding: 0;
+  margin: 0;
+  font-size: 3.0em;
+}
+
+.jp-title {
+  padding: 0 1em;
+}
+
+.jp-controls {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-family: Helvetica, sans-serif;
+  color: black;
+  font-size: 0.75rem;
+  margin: 0;
+  margin-left: 0;
+  padding: 0;
+}
+
+.jp-currenttime {
+  margin-right: 1em;
+}
+
+.jp-duration {
+  margin-left: 1em;
+}
+
+.jp-progress {
+  width: 300px;
+  height: 5px;
+  background: grey;
+}
+
+.jp-seek-bar {
+  width: 100%;
+  height: 100%;
+}
+
+.jp-play-bar {
+  height: 100%;
+  background: blue;
+}
+</style>
+
+
+<div id="{{ $css_id }}" class="jp-jplayer"></div>
+
+<div id="{{ $container_id }}" class="jp-audio" role="application" aria-label="media player">
+  <div class="jp-type-single">
+    <div class="jp-gui jp-interface">
+      <div class="jp-controls hugo-jp-controls">
+        <button class="jp-play hugo-jp-play" role="button" tabindex="0">▶</button>
+        <div class="jp-title hugo-jp-title" aria-label="title">{{ $title }}</div>
+        <div class="jp-duration hugo-jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+      </div>
+    </div>
+    <div class="jp-no-solution">
+      <p>A problem occurred with the audio player. Here is some debug info:</p>
+      <p> Title: {{ $title }} </p>
+      <p> MP3: {{ $mp3 }} </p>
+      <p> ID: {{ $id }} </p>
+      <p> CSS ID: {{ $css_id }} </p>
+      <p> Container ID: {{ $container_id }} </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    var myPlayer = $("#{{ $css_id }}");
+    var allPlayers = $(".jp-jplayer");
+
+    myPlayer.jPlayer({
+      ready: function () {
+
+        $(this).jPlayer("setMedia", {
+          title: "{{ $title }}",
+          mp3: "{{ $mp3 }}"
+        });
+      },
+      swfPath: "/js",
+      supplied: "mp3",
+      wmode: "window",
+      cssSelectorAncestor: "#{{ $container_id }}",
+      useStateClassSkin: true,
+      autoBlur: false,
+      smoothPlayBar: false,
+      keyEnabled: true,
+      remainingDuration: true,
+      toggleDuration: true,
+      errorAlerts: true,
+      warningAlerts: false,
+      preload: "none"
+    });
+
+    myPlayer.bind($.jPlayer.event.play, function () {
+      allPlayers.not(myPlayer).jPlayer("pause");
+      $('#{{ $container_id }} .jp-play').text('⏸');
+    });
+
+    myPlayer.bind($.jPlayer.event.pause, function () {
+      $('#{{ $container_id }} .jp-play').text('▶');
+    });
+
+    myPlayer.bind($.jPlayer.event.error, function (event) {
+      console.error("jPlayer error:", event.jPlayer.error);
+      console.error("Error type:", event.jPlayer.error.type);
+      console.error("Error context:", event.jPlayer.error.context);
+      console.error("Error message:", event.jPlayer.error.message);
+    });
+  });
+</script>

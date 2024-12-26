@@ -1,0 +1,4 @@
+{{ $title := .Get "title" }}
+{{ $url := .Get "url" }}
+
+{{ partial "simple-audio-player.html" (dict "title" $title "mp3" $url) }}
