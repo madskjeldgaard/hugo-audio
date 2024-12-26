@@ -1,4 +1,6 @@
 {{ $title := .Get "title" }}
 {{ $url := .Get "url" }}
+{{ $showDuration := .Get "showDuration" | default true }}
+{{ $showProgressBar := .Get "showProgressBar" | default true }}
 
-{{ partial "simple-audio-player.html" (dict "title" $title "mp3" $url) }}
+{{ partial "simple-audio-player.html" (dict "title" $title "mp3" $url "showDuration" $showDuration "showProgressBar" $showProgressBar) }}
