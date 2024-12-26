@@ -1,6 +1,6 @@
 # Audio player theme component for Hugo websites
 
-This [theme component](https://gohugo.io/hugo-modules/theme-components/#readout) for [Hugo Static Sites](https://gohugo.io/) allows you to embed audio players based on [jplayer](https://jplayer.org/).
+This [theme component](https://gohugo.io/hugo-modules/theme-components/#readout) for [Hugo Static Sites](https://gohugo.io/) allows you to embed audio players based on [jplayer](https://jplayer.org/). One of the advantages of this approach over normal html5 web audio players is that it allows more finetuned customization and tweaks.
 
 You can see it in action on [madskjeldgaard.dk](https://madskjeldgaard.dk) and [exformal.art](https://exformal.art)
 
