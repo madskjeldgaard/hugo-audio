@@ -1,0 +1,136 @@
+{{/* An audio player with a cover on the side. */}}
+{{/* This is a work in progress */}}
+
+{{ $title := .title | default "" }}
+{{ $mp3 := .mp3 }}
+{{ $cover := .cover }}
+{{ $id := .id | default (now.UnixNano) }}
+
+{{ $css_id := printf "jquery_jplayer_%d" $id }}
+{{ $container_id := printf "jp_container_%d" $id }}
+
+<style>
+.hugo-large-audio-player {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 1em;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hugo-large-audio-player img {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  margin-right: 1em;
+}
+
+.hugo-large-audio-player .hugo-player-info {
+  flex-grow: 1;
+}
+
+.hugo-large-audio-player .hugo-player-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.hugo-large-audio-player .hugo-player-controls {
+  display: flex;
+  align-items: center;
+}
+
+.hugo-large-audio-player .hugo-jp-play {
+  background-color: #159542;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 1em;
+}
+
+.hugo-large-audio-player .hugo-jp-progress {
+  flex-grow: 1;
+  height: 4px;
+  background: #dedede;
+  position: relative;
+}
+
+.hugo-large-audio-player .hugo-jp-play-bar {
+  height: 100%;
+  background: #159542;
+  width: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+</style>
+
+<div id="{{ $css_id }}" class="jp-jplayer hugo-jp-jplayer"></div>
+
+<div id="{{ $container_id }}" class="jp-audio hugo-jp-audio" role="application" aria-label="media player">
+  <div class="hugo-large-audio-player">
+    <img src="{{ $cover }}" alt="Cover image for {{ $title }}">
+    <div class="hugo-player-info">
+      <div class="hugo-player-title">{{ $title }}</div>
+      <div class="hugo-player-controls">
+        <button class="jp-play hugo-jp-play" role="button" tabindex="0">▶</button>
+        <div class="hugo-jp-progress">
+          <div class="hugo-jp-play-bar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    var myPlayer = $("#{{ $css_id }}");
+    var allPlayers = $(".jp-jplayer");
+
+    myPlayer.jPlayer({
+      ready: function () {
+        $(this).jPlayer("setMedia", {
+          title: "{{ $title }}",
+          mp3: "{{ $mp3 }}"
+        });
+      },
+      swfPath: "/js",
+      supplied: "mp3",
+      wmode: "window",
+      cssSelectorAncestor: "#{{ $container_id }}",
+      useStateClassSkin: true,
+      autoBlur: false,
+      smoothPlayBar: false,
+      keyEnabled: true,
+      remainingDuration: true,
+      toggleDuration: true,
+      errorAlerts: true,
+      warningAlerts: false,
+      preload: "none"
+    });
+
+    myPlayer.bind($.jPlayer.event.play, function () {
+      allPlayers.not(myPlayer).jPlayer("pause");
+      $('#{{ $container_id }} .jp-play').text('⏸');
+    });
+
+    myPlayer.bind($.jPlayer.event.pause, function () {
+      $('#{{ $container_id }} .jp-play').text('▶');
+    });
+
+    myPlayer.bind($.jPlayer.event.error, function (event) {
+      console.error("jPlayer error:", event.jPlayer.error);
+      console.error("Error type:", event.jPlayer.error.type);
+      console.error("Error context:", event.jPlayer.error.context);
+      console.error("Error message:", event.jPlayer.error.message);
+    });
+  });
+</script>

@@ -1,0 +1,6 @@
+{{ $title := .Get "title" }}
+{{ $url := .Get "url" }}
+{{ $cover := .Get "cover" }}
+{{ $id := now.UnixNano }}
+
+{{ partial "large-audio-player.html" (dict "title" $title "mp3" $url "cover" $cover "id" $id) }}
