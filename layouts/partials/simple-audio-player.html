@@ -3,6 +3,7 @@
 {{ $id := .id | default (now.UnixNano) }}
 {{ $showDuration := .showDuration |default true }}
 {{$showProgressBar := .showProgressBar|default false }}
+{{$showTitle := .showTitle|default false }}
 
 {{ $css_id := printf "jquery_jplayer_%d" $id }}
 {{ $container_id := printf "jp_container_%d" $id }}
@@ -68,7 +69,10 @@
     <div class="jp-gui jp-interface">
       <div class="jp-controls hugo-jp-controls">
         <button class="jp-play hugo-jp-play" role="button" tabindex="0">▶</button>
+
+        {{if $showTitle}}
         <div class="jp-title hugo-jp-title" aria-label="title">{{ $title }}</div>
+      {{end}}
 
         {{ if $showProgressBar }}
         <div class="hugo-jp-progress">

@@ -34,6 +34,12 @@ Embeds a simple audio player in your content. You can call this in your markdown
 {{< simpleaudioplayer title="15:15 PM (excerpt)" url="/audio/music/04 - Mads Kjeldgaard - 15_15 PM (Excerpt) (EX001).mp3" >}}
 ```
 
+The player includes some default settings that may be overwritten like this:
+
+```
+{{< simpleaudioplayer title="15:15 PM (excerpt)" url="/audio/music/04 - Mads Kjeldgaard - 15_15 PM (Excerpt) (EX001).mp3" showTitle=false showDuration=true showProgressBar=false>}}
+```
+
 ### Partials
 
 #### Simple Audio Player
