@@ -135,11 +135,11 @@
       $('#{{ $container_id }} .jp-play').text('▶');
     });
 
-    myPlayer.bind($.jPlayer.event.error, function (event) {
-      console.error("jPlayer error:", event.jPlayer.error);
-      console.error("Error type:", event.jPlayer.error.type);
-      console.error("Error context:", event.jPlayer.error.context);
-      console.error("Error message:", event.jPlayer.error.message);
-    });
+    {{/* myPlayer.bind($.jPlayer.event.error, function (event) { */}}
+    {{/*   console.error("jPlayer error:", event.jPlayer.error); */}}
+    {{/*   console.error("Error type:", event.jPlayer.error.type); */}}
+    {{/*   console.error("Error context:", event.jPlayer.error.context); */}}
+    {{/*   console.error("Error message:", event.jPlayer.error.message); */}}
+    {{/* }); */}}
   });
 </script>
