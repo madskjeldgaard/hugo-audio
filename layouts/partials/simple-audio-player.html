@@ -16,8 +16,8 @@
     background-color: white;
     color: black;
     padding: 0;
-    margin: 0;
-    font-size: 3.0em;
+    margin: 0 1em 0 0;
+    font-size: 2.0em;
   }
 
   .jp-title {
@@ -30,18 +30,25 @@
     align-items: center;
     font-family: Helvetica, sans-serif;
     color: black;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     margin: 0;
     margin-left: 0;
     padding: 0;
   }
 
+  .jp-time-holder {
+    display: flex;
+    align-items: center;
+  }
+
   .jp-currenttime {
-    margin-right: 1em;
+    margin-right: 0.25em;
+    margin-left: 0.25em;
   }
 
   .jp-duration {
-    margin-left: 1em;
+    margin-left: 0.25em;
+    margin-left: 0.25em;
   }
 
   .jp-progress {
@@ -72,7 +79,7 @@
 
         {{if $showTitle}}
         <div class="jp-title hugo-jp-title" aria-label="title">{{ $title }}</div>
-      {{end}}
+        {{end}}
 
         {{ if $showProgressBar }}
         <div class="hugo-jp-progress">
@@ -81,7 +88,11 @@
         {{ end }}
 
         {{ if $showDuration }}
-        <div class="jp-duration hugo-jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+        <div class="jp-time-holder">
+          <div class="jp-currenttime hugo-jp-currenttime" role="timer" aria-label="current time">0:00</div>
+          <span> / </span>
+          <div class="jp-duration hugo-jp-duration" role="timer" aria-label="duration">0:00</div>
+        </div>
         {{ end }}
 
 
@@ -105,7 +116,6 @@
 
     myPlayer.jPlayer({
       ready: function () {
-
         $(this).jPlayer("setMedia", {
           title: "{{ $title }}",
           mp3: "{{ $mp3 }}"
@@ -123,7 +133,16 @@
       toggleDuration: true,
       errorAlerts: true,
       warningAlerts: false,
-      preload: "none"
+      preload: "none",
+      timeFormat: {
+        showHour: false,
+        showMin: true,
+        showSec: true,
+        padHour: false,
+        padMin: true,
+        padSec: true,
+        separator: ':'
+      }
     });
 
     myPlayer.bind($.jPlayer.event.play, function () {
@@ -135,11 +154,22 @@
       $('#{{ $container_id }} .jp-play').text('▶');
     });
 
-    {{/* myPlayer.bind($.jPlayer.event.error, function (event) { */}}
-    {{/*   console.error("jPlayer error:", event.jPlayer.error); */}}
-    {{/*   console.error("Error type:", event.jPlayer.error.type); */}}
-    {{/*   console.error("Error context:", event.jPlayer.error.context); */}}
-    {{/*   console.error("Error message:", event.jPlayer.error.message); */}}
-    {{/* }); */}}
+    myPlayer.bind($.jPlayer.event.timeupdate, function (event) {
+      var current = event.jPlayer.status.currentTime;
+      var duration = event.jPlayer.status.duration;
+
+      // Format current time
+      var currentMinutes = Math.floor(current / 60);
+      var currentSeconds = Math.floor(current % 60);
+      var currentFormatted = currentMinutes + ":" + (currentSeconds < 10 ? "0" : "") + currentSeconds;
+
+      // Format duration
+      var durationMinutes = Math.floor(duration / 60);
+      var durationSeconds = Math.floor(duration % 60);
+      var durationFormatted = durationMinutes + ":" + (durationSeconds < 10 ? "0" : "") + durationSeconds;
+
+      $('#{{ $container_id }} .jp-currenttime').text(currentFormatted);
+      $('#{{ $container_id }} .jp-duration').text(durationFormatted);
+    });
   });
 </script>
